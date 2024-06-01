@@ -1,0 +1,93 @@
+.formLayout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0px;
+  width: 100%;
+  .trainingCostLayout {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    .label {
+      color: #000;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+    .cost {
+      color: #000;
+      text-align: right;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+  }
+  .select {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    .label {
+      color: #000;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+  }
+  .slotWrap {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: -12px;
+    margin-bottom: 12px;
+    .slot {
+      display: flex;
+      padding: 8px 12px;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      cursor: pointer;
+      border: none;
+      color: #000;
+      text-align: center;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 20px;
+      border-radius: 64px;
+    }
+  }
+  .time {
+    border-radius: 15px;
+    border: 1px dashed #bfbfbf;
+    display: flex;
+    padding: 16px 24px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-wrap: nowrap;
+    .p {
+      color: #000;
+
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 135%;
+      .strong {
+        color: #000;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 135%;
+      }
+    }
+  }
+}

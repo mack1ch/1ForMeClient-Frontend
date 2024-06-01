@@ -1,0 +1,41 @@
+.tabItem {
+  display: flex;
+  height: 36px;
+  width: 100%;
+
+  padding: 10px 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  flex: 1 0 0;
+  border-radius: 10px;
+  background: #f9f9f9;
+  cursor: pointer;
+  color: #000;
+  text-wrap: nowrap;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 135%;
+}
+
+.loadingTabItem {
+  display: flex;
+  height: 36px;
+  min-width: 128px;
+
+  padding: 10px 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  flex: 1 0 0;
+  border-radius: 10px;
+  background: #f9f9f9;
+  cursor: pointer;
+  color: #000;
+  text-wrap: nowrap;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 135%;
+}
