@@ -23,6 +23,11 @@ export const ClubCard = ({
     dispatch(resetStore());
     dispatch(setAvailableTrainers(clubSlot.slots[slotID].trainersAvailable));
   };
+  for (const slot of clubSlot.slots) {
+    if (slot.isAvailable === false) {
+      return undefined;
+    }
+  }
   return (
     <article className={styles.clubCard}>
       <div className={styles.info}>
