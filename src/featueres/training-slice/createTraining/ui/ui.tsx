@@ -224,6 +224,7 @@ export const CreateTraining = ({ time }: { time: string }) => {
 
   // Создание тренировки POST
   const handleCreateTraining = async () => {
+    setIsButtonLoading(true);
     try {
       const response = await createTraining(formData);
       if (response instanceof Error) {
