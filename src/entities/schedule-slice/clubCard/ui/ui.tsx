@@ -8,6 +8,7 @@ import {
   resetStore,
   setAvailableTrainers,
 } from "@/shared/redux/slices/availableTrainers";
+import { countAvailableSlots } from "../model";
 
 export const ClubCard = ({
   clubSlot,
@@ -31,15 +32,15 @@ export const ClubCard = ({
     }
     return false;
   }
-
   if (isAnySlotAvailable(clubSlot) === false) return false;
+
   return (
     <article className={styles.clubCard}>
       <div className={styles.info}>
         <div className={styles.info__text}>
           <h4 className={styles.name}>{clubSlot.club.name}</h4>
           <h5 className={styles.freeSlots}>
-            {clubSlot.slots.length} свободных слотов по часу
+            {countAvailableSlots(clubSlot.slots)} свободных слотов по часу
           </h5>
         </div>
       </div>

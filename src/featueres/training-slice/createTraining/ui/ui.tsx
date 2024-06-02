@@ -9,25 +9,15 @@ import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { IFormData, ISelectOptions } from "../interface";
 import { useRouter } from "next/navigation";
-import {
-  Button,
-  DatePicker,
-  Form,
-  Input,
-  message,
-  notification,
-  Select,
-  TimePickerProps,
-} from "antd";
+import { Button, Form, Input, message, notification, Select } from "antd";
 import styles from "./ui.module.scss";
 import InputMask from "react-input-mask";
 import { IClubSlot } from "@/shared/interface/slots";
-import { dateFormatForDatePicker } from "../data";
 import {
   convertDateToDoteFormatDDMMYYYY,
+  convertToMinutes,
   customFilterOption,
   customFilterSort,
-  disabledDate,
   findOptionById,
   parseURLParams,
 } from "../model";
@@ -38,7 +28,7 @@ import { IChatTypes } from "@/shared/interface/chat";
 import { useAppSelector } from "@/shared/redux/store";
 import { IUser } from "@/shared/interface/user";
 import { createTraining } from "../api";
-import { ITraining } from "@/shared/interface/training";
+
 export const CreateTraining = ({ time }: { time: string }) => {
   const [api, contextHolder] = notification.useNotification();
   const URLParams = parseURLParams(time);
@@ -68,16 +58,6 @@ export const CreateTraining = ({ time }: { time: string }) => {
 
   // Получаю список всех залов
   const { data: clubs } = useSWR<IClub[], Error>("/clubs", fetcher);
-
-  // Получаю слоты для выбранного слота и выбранной даты
-  const { data: slots } = useSWR<IClubSlot[], Error>(
-    formData.clubID && formData.date
-      ? `/clubs/${formData.clubID}/slots?date=${convertDateFormatToDashFormat(
-          formData.date.toString()
-        )} `
-      : null,
-    fetcher
-  );
 
   // Получаю всех клиентов
   const { data: clients } = useSWR<IUser[], Error>(
@@ -171,29 +151,11 @@ export const CreateTraining = ({ time }: { time: string }) => {
     }
   }, [URLParams.date]);
   // handleChange
-  const handleDateChange: TimePickerProps["onChange"] = (date, dateString) => {
-    setFormData((prev) => ({
-      ...prev,
-      date: dateString,
-      dateInput: date,
-    }));
-  };
-  const handleSlotSelection = (slotID: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      slotID: slotID,
-    }));
-  };
+
   const handleTariffChange = (value: string) => {
     setFormData((prev) => ({
       ...prev,
       tariffID: value,
-    }));
-  };
-  const handleClubChange = (value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      clubID: value,
     }));
   };
   const handleTrainerChange = (value: string) => {
@@ -280,6 +242,9 @@ export const CreateTraining = ({ time }: { time: string }) => {
   useEffect(() => {
     setIsFormValid(checkFormValidity());
   }, [formData]);
+  const { day, dayOfWeek, month } = parseDateToDateAndMonth(
+    formData.date.toString()
+  );
   return (
     <>
       {contextHolder}
@@ -287,7 +252,7 @@ export const CreateTraining = ({ time }: { time: string }) => {
         <div className={styles.formLayout}>
           <Form.Item
             name="userName"
-            label="Имя и фамилия"
+            label="Ваше имя"
             style={{
               width: "100%",
               textAlign: "start",
@@ -298,7 +263,7 @@ export const CreateTraining = ({ time }: { time: string }) => {
               value={formData?.userName}
               size="large"
               onChange={(e) => handleInputChange("userName", e.target.value)}
-              placeholder="Имя и фамилия"
+              placeholder="Имя"
             />
           </Form.Item>
           <Form.Item
@@ -434,81 +399,40 @@ export const CreateTraining = ({ time }: { time: string }) => {
               placeholder="Выберите тренера"
             />
           </Form.Item>
-          <Form.Item
-            label="Зал:"
-            style={{
-              width: "100%",
-              textAlign: "start",
-              alignItems: "flex-start",
-            }}
-          >
-            <Select
-              style={{ width: "100%" }}
-              showSearch
-              value={findOptionById(
-                formData.clubID?.toString() || null,
-                selectClubsOptions
-              )?.label?.toString()}
-              filterOption={customFilterOption}
-              filterSort={customFilterSort}
-              onChange={handleClubChange}
-              options={selectClubsOptions}
-              size="large"
-              placeholder="Выберите зал"
-            />
-          </Form.Item>
-          <Form.Item
-            label="Дата:"
-            style={{
-              width: "100%",
-              textAlign: "start",
-              alignItems: "flex-start",
-            }}
-          >
-            <DatePicker
-              size="large"
-              onChange={handleDateChange}
-              format={dateFormatForDatePicker}
-              inputReadOnly
-              disabledDate={disabledDate}
-              value={formData.dateInput}
-              placeholder="Дата тренировки"
-              style={{ width: "100%", fontSize: "16px" }}
-            />
-          </Form.Item>
-          {slots && (
-            <div className={styles.slotWrap}>
-              {slots?.map((slot) => {
-                if (slot.isAvailable) {
-                  return (
-                    <button
-                      onClick={() => handleSlotSelection(slot.id)}
-                      key={slot.id}
-                      style={{
-                        background: formData.slotID === slot.id ? "#000" : "",
-                        color: formData.slotID === slot.id ? "#fff" : "",
-                      }}
-                      className={styles.slot}
-                    >
-                      {slot.beginning}
-                    </button>
-                  );
-                }
-                return null;
-              })}
-            </div>
-          )}
 
-          <div className={styles.trainingCostLayout}>
-            <label className={styles.label}>Стоимость тренировки:</label>
-            <p className={styles.cost}>
-              {selectTariffInArray?.cost &&
-                convertToCurrencyFormat(
-                  selectTariffInArray?.cost.toString() || ""
-                )}
-              {selectTariffInArray?.cost && " ₽"}
-            </p>
-          </div>
+          {selectTariffInArray && (
+            <Form.Item
+              style={{
+                width: "100%",
+                textAlign: "start",
+                alignItems: "flex-start",
+              }}
+            >
+              <div className={styles.training}>
+                <div className={styles.header}>
+                  <h4 className={styles.h4}>
+                    {dayOfWeek}, {day} {month.name}
+                  </h4>
+                  <h4 className={styles.h4}>
+                    {convertToMinutes(selectTariffInArray?.duration)} минут
+                  </h4>
+                  <h4 style={{ textWrap: "nowrap" }} className={styles.h4}>
+                    {selectTariffInArray?.cost &&
+                      convertToCurrencyFormat(
+                        selectTariffInArray?.cost.toString() || ""
+                      )}
+                    {selectTariffInArray?.cost && " ₽"}
+                  </h4>
+                </div>
+                <h4 style={{ fontWeight: "600" }} className={styles.h4}>
+                  {findOptionById(
+                    formData.clubID?.toString() || null,
+                    selectClubsOptions
+                  )?.label?.toString()}
+                </h4>
+              </div>
+            </Form.Item>
+          )}
           <Form.Item
             style={{
               width: "100%",

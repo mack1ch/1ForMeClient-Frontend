@@ -60,3 +60,12 @@ export function convertDateToDoteFormatDDMMYYYY(dateString: string): string {
   // Возвращаем дату в формате DD.MM.YYYY
   return `${day}.${month}.${year}`;
 }
+
+export function convertToMinutes(time?: string): number {
+  if (!time) return 0;
+  // Разделяем строку на часы и минуты
+  const [hours, minutes] = time.split(":").map(Number);
+
+  // Преобразуем часы в минуты и складываем с минутами
+  return hours * 60 + minutes;
+}
