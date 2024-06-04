@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { Button, Form, Input, message, notification, Select } from "antd";
 import styles from "./ui.module.scss";
 import InputMask from "react-input-mask";
-import { IClubSlot } from "@/shared/interface/slots";
+
 import {
   convertDateToDoteFormatDDMMYYYY,
   convertToMinutes,
@@ -33,9 +33,10 @@ export const CreateTraining = ({ time }: { time: string }) => {
   const [api, contextHolder] = notification.useNotification();
   const URLParams = parseURLParams(time);
   const router = useRouter();
-  const availableTrainers = useAppSelector(
+  const trainer = useAppSelector(
     (state) => state.availableTrainers.availableTrainers
   );
+  const chosenTime = useAppSelector((state) => state.chosenTime.time);
   const [isButtonLoading, setIsButtonLoading] = useState<boolean>(false);
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [formData, setFormData] = useState<IFormData>({
@@ -44,7 +45,7 @@ export const CreateTraining = ({ time }: { time: string }) => {
     dateInput: null,
     tariffID: null,
     clubID: URLParams.clubID,
-    trainerID: null,
+    trainerID: trainer?.id || "",
     userChatTypeID: "",
     userName: "",
     userPhone: "",
@@ -113,14 +114,7 @@ export const CreateTraining = ({ time }: { time: string }) => {
         }))
       );
     }
-    if (Array.isArray(availableTrainers)) {
-      setSelectAvailableTrainersOptions((prev) =>
-        availableTrainers.map((availableTrainer) => ({
-          label: availableTrainer.name + " " + availableTrainer.surname,
-          value: availableTrainer.id.toString(),
-        }))
-      );
-    }
+
     if (Array.isArray(clients)) {
       setSelectClientsOptions((prev) =>
         clients.map((client) => ({
@@ -129,14 +123,7 @@ export const CreateTraining = ({ time }: { time: string }) => {
         }))
       );
     }
-  }, [
-    clubs,
-    formData.tariffID,
-    tariffs,
-    chatTypes,
-    availableTrainers,
-    clients,
-  ]);
+  }, [clubs, formData.tariffID, tariffs, chatTypes, clients]);
 
   // date reload
   useEffect(() => {
@@ -158,12 +145,7 @@ export const CreateTraining = ({ time }: { time: string }) => {
       tariffID: value,
     }));
   };
-  const handleTrainerChange = (value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      trainerID: value,
-    }));
-  };
+
   const handleClientChange = (value: string) => {
     setFormData((prev) => ({
       ...prev,
@@ -218,26 +200,8 @@ export const CreateTraining = ({ time }: { time: string }) => {
 
   // Валидация
   const checkFormValidity = () => {
-    const {
-      userName,
-      userPhone,
-      userChatTypeID,
-      tariffID,
-      clubID,
-      trainerID,
-      date,
-      slotID,
-    } = formData;
-    return Boolean(
-      userName &&
-        userPhone &&
-        userChatTypeID &&
-        tariffID &&
-        clubID &&
-        trainerID &&
-        date &&
-        slotID
-    );
+    const { userName, userPhone, userChatTypeID, tariffID, date } = formData;
+    return Boolean(userName && userPhone && userChatTypeID && tariffID);
   };
   useEffect(() => {
     setIsFormValid(checkFormValidity());
@@ -335,7 +299,7 @@ export const CreateTraining = ({ time }: { time: string }) => {
             </Form.Item>
           )}
           <Form.Item
-            label="Тариф:"
+            label="Услуга:"
             style={{
               width: "100%",
               textAlign: "start",
@@ -350,7 +314,7 @@ export const CreateTraining = ({ time }: { time: string }) => {
               filterOption={customFilterOption}
               filterSort={customFilterSort}
               options={selectTariffsOptions}
-              placeholder="Выберите тариф"
+              placeholder="Выберите услугу"
             />
           </Form.Item>
           {selectTariffInArray?.name.toLowerCase().includes("сплит") ? (
@@ -380,25 +344,6 @@ export const CreateTraining = ({ time }: { time: string }) => {
               />
             </Form.Item>
           ) : undefined}
-          <Form.Item
-            label="Тренер:"
-            style={{
-              width: "100%",
-              textAlign: "start",
-              alignItems: "flex-start",
-            }}
-          >
-            <Select
-              size="large"
-              style={{ width: "100%" }}
-              showSearch
-              onChange={handleTrainerChange}
-              filterOption={customFilterOption}
-              filterSort={customFilterSort}
-              options={selectAvailableTrainersOptions}
-              placeholder="Выберите тренера"
-            />
-          </Form.Item>
 
           {selectTariffInArray && (
             <Form.Item
@@ -410,7 +355,7 @@ export const CreateTraining = ({ time }: { time: string }) => {
             >
               <div className={styles.training}>
                 <h4 className={styles.h4}>
-                  {dayOfWeek}, {day} {month.name}
+                  {dayOfWeek}, {day} {month.name} | {chosenTime}
                 </h4>
                 <h4 className={styles.h4}>
                   {convertToMinutes(selectTariffInArray?.duration)} минут
@@ -422,12 +367,14 @@ export const CreateTraining = ({ time }: { time: string }) => {
                     )}
                   {selectTariffInArray?.cost && " ₽"}
                 </h4>
-
                 <h4 style={{ fontWeight: "600" }} className={styles.h4}>
                   {findOptionById(
                     formData.clubID?.toString() || null,
                     selectClubsOptions
                   )?.label?.toString()}
+                </h4>
+                <h4 className={styles.h4}>
+                  {trainer?.surname + " " + trainer?.name}
                 </h4>
               </div>
             </Form.Item>

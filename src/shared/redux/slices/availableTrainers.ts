@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 export interface IAvailableTrainers {
-  availableTrainers: IUser[] | undefined;
+  availableTrainers: IUser | undefined;
 }
 
 const initialState: IAvailableTrainers = {
@@ -14,10 +14,7 @@ export const availableTrainers = createSlice({
   name: "availableTrainers",
   initialState,
   reducers: {
-    setAvailableTrainers: (
-      state,
-      action: PayloadAction<IUser[] | undefined>
-    ) => {
+    setAvailableTrainers: (state, action: PayloadAction<IUser | undefined>) => {
       state.availableTrainers = action.payload;
     },
     resetStore: (state) => {

@@ -34,30 +34,85 @@
       }
     }
   }
-  .tags {
+  .trainerCard {
     display: flex;
+    flex-direction: column;
     align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 8px;
     width: 100%;
-
-    .tag {
+    gap: 8px;
+    .trainer {
       display: flex;
-      padding: 8px 12px;
-      justify-content: center;
-      align-items: center;
-      gap: 4px;
-      border-radius: 16px;
-      background: #f9f9f9;
-      color: #000;
-      text-align: center;
-      font-size: 16px;
-      font-style: normal;
-      font-weight: 600;
-      line-height: 135%;
-      transition: all 0.2s;
-      &:hover {
-        filter: brightness(95%);
+      align-items: flex-start;
+      width: 100%;
+      gap: 8px;
+      .trainerInfo {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        .h4 {
+          color: #000;
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 600;
+          line-height: 16px;
+          &:first-letter {
+            text-transform: uppercase;
+          }
+        }
+        .p {
+          color: #000;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 16px;
+          &:first-letter {
+            text-transform: uppercase;
+          }
+        }
+      }
+      .avatar {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        min-height: 48px;
+        display: flex;
+        border-radius: 24px;
+        border: 2px solid #fff;
+        background: #bad6b1;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+      }
+    }
+    .tags {
+      display: flex;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 8px;
+      width: 100%;
+
+      .tag {
+        display: flex;
+        padding: 8px 12px;
+        justify-content: center;
+        align-items: center;
+        gap: 4px;
+        border-radius: 16px;
+        background: #f9f9f9;
+        color: #000;
+        text-align: center;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 135%;
+        transition: all 0.2s;
+        &:hover {
+          filter: brightness(95%);
+        }
       }
     }
   }
