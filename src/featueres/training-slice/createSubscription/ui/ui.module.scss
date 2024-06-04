@@ -1,0 +1,116 @@
+.formLayout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  .subscriptionCostLayout {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: -8px;
+    margin-bottom: 8px;
+    .label {
+      color: #000;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+    .cost {
+      color: #000;
+      text-align: right;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+  }
+  .trainingsWrap {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 16px;
+    .slotsWrap {
+      display: flex;
+      width: 100%;
+      flex-wrap: wrap;
+      gap: 8px;
+      .slot {
+        display: flex;
+        padding: 8px 12px;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        background: #efefef;
+        cursor: pointer;
+        border: none;
+        color: #000;
+        text-align: center;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 20px;
+        border-radius: 64px;
+      }
+    }
+    .trainingsLayout {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      width: 100%;
+      .switch {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        .switchLabel {
+          color: #000;
+          text-align: left;
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 200;
+          line-height: normal;
+        }
+      }
+      .label {
+        color: #000;
+        text-align: left;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+
+        &:first-letter {
+          text-transform: uppercase;
+        }
+      }
+      .inputLayout {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+  }
+}
+
+.switchLayout {
+  border-radius: 20px;
+  background: #fff;
+  display: flex;
+  width: 100%;
+  padding: 16px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  .switchLabel {
+    color: #000;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+}

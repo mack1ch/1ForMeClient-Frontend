@@ -1,10 +1,7 @@
 import { fetcher } from "@/shared/api";
 import { IClub } from "@/shared/interface/club";
 import { ITariff } from "@/shared/interface/tariff";
-import {
-  convertDateFormatToDashFormat,
-  parseDateToDateAndMonth,
-} from "@/shared/lib/parse/date";
+import { parseDateToDateAndMonth } from "@/shared/lib/parse/date";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { IFormData, ISelectOptions } from "../interface";
@@ -77,8 +74,6 @@ export const CreateTraining = ({ time }: { time: string }) => {
     useState<ISelectOptions[]>();
   const [selectTariffInArray, setSelectTariffInArray] = useState<ITariff>();
   const [chatTypesOptions, setChatTypesOptions] = useState<ISelectOptions[]>();
-  const [selectAvailableTrainersOptions, setSelectAvailableTrainersOptions] =
-    useState<ISelectOptions[]>();
   const [selectClubsOptions, setSelectClubsOptions] =
     useState<ISelectOptions[]>();
   const [selectClientsOptions, setSelectClientsOptions] =
