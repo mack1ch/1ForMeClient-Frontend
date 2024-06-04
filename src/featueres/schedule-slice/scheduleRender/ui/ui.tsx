@@ -39,7 +39,6 @@ export const ScheduleRender = () => {
       return getFreeSlotsCount(clubSchedule) === 0;
     });
   });
-
   return (
     <>
       <div className={styles.tabs}>

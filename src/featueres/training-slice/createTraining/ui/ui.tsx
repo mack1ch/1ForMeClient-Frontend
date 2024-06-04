@@ -409,21 +409,20 @@ export const CreateTraining = ({ time }: { time: string }) => {
               }}
             >
               <div className={styles.training}>
-                <div className={styles.header}>
-                  <h4 className={styles.h4}>
-                    {dayOfWeek}, {day} {month.name}
-                  </h4>
-                  <h4 className={styles.h4}>
-                    {convertToMinutes(selectTariffInArray?.duration)} минут
-                  </h4>
-                  <h4 style={{ textWrap: "nowrap" }} className={styles.h4}>
-                    {selectTariffInArray?.cost &&
-                      convertToCurrencyFormat(
-                        selectTariffInArray?.cost.toString() || ""
-                      )}
-                    {selectTariffInArray?.cost && " ₽"}
-                  </h4>
-                </div>
+                <h4 className={styles.h4}>
+                  {dayOfWeek}, {day} {month.name}
+                </h4>
+                <h4 className={styles.h4}>
+                  {convertToMinutes(selectTariffInArray?.duration)} минут
+                </h4>
+                <h4 style={{ textWrap: "nowrap" }} className={styles.h4}>
+                  {selectTariffInArray?.cost &&
+                    convertToCurrencyFormat(
+                      selectTariffInArray?.cost.toString() || ""
+                    )}
+                  {selectTariffInArray?.cost && " ₽"}
+                </h4>
+
                 <h4 style={{ fontWeight: "600" }} className={styles.h4}>
                   {findOptionById(
                     formData.clubID?.toString() || null,
