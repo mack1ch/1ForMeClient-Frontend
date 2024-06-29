@@ -6,9 +6,8 @@ import { PageHeader } from "@/shared/ui/header-slice/pageHeader";
 import { HeadingWithSlash } from "@/shared/ui/header-slice/slashHeader";
 import { AppLayout } from "@/shared/ui/layout-slice/appLayout";
 import { PageLayout } from "@/shared/ui/layout-slice/pageLayout";
-import { PlusOutlined } from "@ant-design/icons";
-import { Button } from "antd";
-
+import Image from "next/image";
+import ProductLogo from "../../public/assets/1formeLogo.png";
 export default function Home() {
   return (
     <>
@@ -24,15 +23,7 @@ export default function Home() {
               }}
             >
               <HeadingWithSlash>Расписание</HeadingWithSlash>
-              <Button
-                href="/newsubscription"
-                style={{ float: "right" }}
-                icon={<PlusOutlined />}
-                size="middle"
-                type="primary"
-              >
-                Покупка абонемента
-              </Button>
+              <Image width={84} height={24} src={ProductLogo} alt="1ForMe" />
             </div>
           </PageHeader>
           <PageLayout>

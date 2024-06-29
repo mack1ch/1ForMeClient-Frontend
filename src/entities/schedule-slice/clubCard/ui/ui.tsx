@@ -72,9 +72,16 @@ export const ClubCard = ({
                     style={{ backgroundImage: `url(${trainer.avatar})` }}
                   />
                   <div className={styles.trainerInfo}>
-                    <h4 className={styles.h4}>
-                      {trainer.surname + " " + trainer.name}
-                    </h4>
+                    <div className={styles.row}>
+                      <h4 className={styles.h4}>
+                        {trainer.name} {trainer.surname}
+                      </h4>
+                      {trainer.trainerProfile.category && (
+                        <span className={styles.category}>
+                          {trainer.trainerProfile.category}
+                        </span>
+                      )}
+                    </div>
                     <p className={styles.p}>
                       {trainer.trainerProfile.description}
                     </p>
