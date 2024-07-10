@@ -175,11 +175,12 @@ export const CreateTraining = ({ time }: { time: string }) => {
         return;
       } else {
         const { day, dayOfWeek, month } = parseDateToDateAndMonth(
-          response[0].date
+          response.trainings[0].date
         );
-        api["success"]({
-          message: "Тренировка создана",
-          description: `Ждём вас в ${dayOfWeek}, ${day} ${month.name}`,
+        
+        message.open({
+          type: "success",
+          content: `Тренировка создана. Ждём вас в ${dayOfWeek}, ${day} ${month.name}`,
         });
         router.push("/");
       }

@@ -1,14 +1,14 @@
 import { ITraining } from "@/shared/interface/training";
-import { IFormData } from "../interface";
+import { IFormData, ITrainingsResponse } from "../interface";
 import { instance } from "@/shared/api";
 import { convertDateFormatToDashFormat } from "@/shared/lib/parse/date";
 import { parseNameToNameAndSurname } from "@/shared/lib/parse/user";
 
 export const createTraining = async (
   formData: IFormData
-): Promise<ITraining[] | Error> => {
+): Promise<ITrainingsResponse | Error> => {
   try {
-    const { data }: { data: ITraining[] } = await instance.post(
+    const { data }: { data: ITrainingsResponse } = await instance.post(
       `/trainings/clientForm`,
       {
         slot: formData.slotID,

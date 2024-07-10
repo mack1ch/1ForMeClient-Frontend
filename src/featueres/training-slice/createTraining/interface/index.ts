@@ -1,3 +1,4 @@
+import { ITraining } from "@/shared/interface/training";
 import dayjs from "dayjs";
 import { ReactNode } from "react";
 
@@ -18,4 +19,9 @@ export interface IFormData {
   userPhone: string;
   userChatTypeID: number | string | null;
   userNameInMessenger?: string;
+}
+
+export interface ITrainingsResponse {
+  existingTrainingsDates: Date[];
+  trainings: ITraining[];
 }
