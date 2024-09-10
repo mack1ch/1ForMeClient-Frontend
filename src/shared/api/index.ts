@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 
-const BASE_URL = "https://1forme.postideas.store/api";
+const BASE_URL = "https://api.1forme.ru/api";
 
 export const fetcher = (url: string) =>
   fetch(BASE_URL + url, {
