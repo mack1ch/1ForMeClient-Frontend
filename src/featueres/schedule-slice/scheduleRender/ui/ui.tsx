@@ -80,14 +80,16 @@ export const ScheduleRender = () => {
                 <h3 className={styles.h3}>
                   {dayOfWeek}, {day} {month.name}
                 </h3>
-                {timeTable.clubsTimeTable.map((clubSchedule, clubIndex) => (
-                  <ClubCard
-                    activeStudioID={activeStudioID || 0}
-                    date={timeTable.date}
-                    key={clubIndex}
-                    clubSlot={clubSchedule}
-                  />
-                ))}
+                <div className={styles.renderCards}>
+                  {timeTable.clubsTimeTable.map((clubSchedule, clubIndex) => (
+                    <ClubCard
+                      activeStudioID={activeStudioID || 0}
+                      date={timeTable.date}
+                      key={clubIndex}
+                      clubSlot={clubSchedule}
+                    />
+                  ))}
+                </div>
               </div>
             );
           })
