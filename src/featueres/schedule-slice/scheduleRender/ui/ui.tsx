@@ -30,7 +30,8 @@ export const ScheduleRender = () => {
     isLoading: scheduleIsLoading,
   } = useSWR<ISchedule, Error>(
     activeStudioID ? `/studios/${activeStudioID}/timeTable` : null,
-    fetcher
+    fetcher,
+    { revalidateOnFocus: false }
   );
 
   const openTab = (studioId: number) => setActiveStudioID(studioId);
@@ -39,6 +40,7 @@ export const ScheduleRender = () => {
       return getFreeSlotsCount(clubSchedule) === 0;
     });
   });
+  console.log(schedule);
   return (
     <>
       <div className={styles.tabs}>

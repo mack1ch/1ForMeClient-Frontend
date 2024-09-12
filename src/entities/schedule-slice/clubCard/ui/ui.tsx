@@ -24,24 +24,35 @@ export const ClubCard = ({
   activeStudioID: number;
 }) => {
   const dispatch = useAppDispatch();
+
   const handleSlotClick = (trainer: IUser, slotTime: string) => {
     dispatch(resetStore());
     dispatch(setAvailableTrainers(trainer));
     dispatch(setChosenSlotTime(slotTime));
   };
+
   const { data: allTrainers } = useSWR<IUser[], Error>(
     "/users?role=trainer",
     fetcher
   );
+
   function isAnySlotAvailable(schedule: IClubSchedule): boolean {
-    for (const slot of schedule.slots) {
-      if (slot.isAvailable === true) {
-        return true;
-      }
-    }
-    return false;
+    return schedule.slots.some((slot) => slot.isAvailable === true);
   }
-  if (isAnySlotAvailable(clubSlot) === false) return false;
+
+  if (!isAnySlotAvailable(clubSlot)) return null;
+
+  // Собираем тренеров, у которых есть доступные слоты
+  const trainersWithSlots = allTrainers
+    ?.map((trainer) => ({
+      trainer,
+      availableSlots: clubSlot.slots.filter((slot) =>
+        slot.trainersAvailable?.some(
+          (availableTrainer) => availableTrainer.id === trainer.id
+        )
+      ),
+    }))
+    .filter(({ availableSlots }) => availableSlots.length > 0); // Оставляем только тех, у кого есть доступные слоты
 
   return (
     <article className={styles.clubCard}>
@@ -54,66 +65,50 @@ export const ClubCard = ({
         </div>
       </div>
 
-      {allTrainers?.map((trainer) => {
-        if (
-          clubSlot.slots.map((slot) =>
-            slot.trainersAvailable?.some(
-              (availableTrainer) => availableTrainer.id == trainer.id
-            )
-          )
-        ) {
-          return (
-            <>
-              <div className={styles.trainerCard} key={trainer.id}>
-                <div className={styles.trainer}>
-                  <span
-                    className={styles.avatar}
-                    style={{ backgroundImage: `url(${trainer.avatar})` }}
-                  />
-                  <div className={styles.trainerInfo}>
-                    <div className={styles.row}>
-                      <h4 className={styles.h4}>
-                        {trainer.name} {trainer.surname}
-                      </h4>
-                      {trainer.trainerProfile.category && (
-                        <span className={styles.category}>
-                          {trainer.trainerProfile.category}
-                        </span>
-                      )}
-                    </div>
-                    <p className={styles.p}>
-                      {trainer.trainerProfile.description}
-                    </p>
-                  </div>
-                </div>
-                <div className={styles.tags}>
-                  {clubSlot.slots
-                    .filter((item) => item.isAvailable)
-                    .map((item, index) => (
-                      <Link
-                        onClick={() => handleSlotClick(trainer, item.beginning)}
-                        key={index}
-                        className={styles.tag}
-                        href={`newtraining/${
-                          date +
-                          "slash" +
-                          clubSlot.club.id +
-                          "slash" +
-                          item.slotId +
-                          "shash" +
-                          activeStudioID
-                        }`}
-                      >
-                        {item.beginning}
-                        <Image src={Plus} width={16} height={16} alt="Plus" />
-                      </Link>
-                    ))}
-                </div>
+      {trainersWithSlots?.map(({ trainer, availableSlots }) => (
+        <div className={styles.trainerCard} key={trainer.id}>
+          <div className={styles.trainer}>
+            <span
+              className={styles.avatar}
+              style={{ backgroundImage: `url(${trainer.avatar})` }}
+            />
+            <div className={styles.trainerInfo}>
+              <div className={styles.row}>
+                <h4 className={styles.h4}>
+                  {trainer.name} {trainer.surname}
+                </h4>
+                {trainer.trainerProfile?.category && (
+                  <span className={styles.category}>
+                    {trainer.trainerProfile.category}
+                  </span>
+                )}
               </div>
-            </>
-          );
-        }
-      })}
+              <p className={styles.p}>{trainer.trainerProfile?.description}</p>
+            </div>
+          </div>
+          <div className={styles.tags}>
+            {availableSlots.map((slot) => (
+              <Link
+                onClick={() => handleSlotClick(trainer, slot.beginning)}
+                key={slot.slotId}
+                className={styles.tag}
+                href={`newtraining/${
+                  date +
+                  "slash" +
+                  clubSlot.club.id +
+                  "slash" +
+                  slot.slotId +
+                  "slash" +
+                  activeStudioID
+                }`}
+              >
+                {slot.beginning}
+                <Image src={Plus} width={16} height={16} alt="Plus" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      ))}
     </article>
   );
 };
