@@ -26,7 +26,6 @@ export const ClubCard = ({
   const dispatch = useAppDispatch();
   const handleSlotClick = (trainer: IUser, slotTime: string) => {
     dispatch(resetStore());
-
     dispatch(setAvailableTrainers(trainer));
     dispatch(setChosenSlotTime(slotTime));
   };

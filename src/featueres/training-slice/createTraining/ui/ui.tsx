@@ -82,12 +82,23 @@ export const CreateTraining = ({ time }: { time: string }) => {
     (option) => option.value === formData.userChatTypeID
   );
   useEffect(() => {
-    if (Array.isArray(tariffs)) {
+    if (Array.isArray(tariffs) && trainer) {
+      console.log(
+        tariffs.filter(
+          (tariff) => tariff.trainerCategory === trainer.trainerProfile.category
+        )
+      );
       setSelectTariffsOptions((prev) =>
-        tariffs?.map((item) => ({
-          label: item.name,
-          value: item.id.toString(),
-        }))
+        tariffs
+          ?.filter(
+            (tariff) =>
+              tariff.trainerCategory.toLowerCase() ===
+              trainer?.trainerProfile.category.toLowerCase()
+          )
+          .map((item) => ({
+            label: item.name,
+            value: item.id.toString(),
+          }))
       );
       setSelectTariffInArray(
         tariffs?.find((option) => option.id.toString() === formData.tariffID)
@@ -177,7 +188,7 @@ export const CreateTraining = ({ time }: { time: string }) => {
         const { day, dayOfWeek, month } = parseDateToDateAndMonth(
           response.trainings[0].date
         );
-        
+
         message.open({
           type: "success",
           content: `Тренировка создана. Ждём вас в ${dayOfWeek}, ${day} ${month.name}`,
