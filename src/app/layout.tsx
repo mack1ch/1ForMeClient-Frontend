@@ -2,6 +2,8 @@ import { Metadata } from "next";
 import "./globals.scss";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import localFont from "next/font/local";
+import oneForMeLogo from "../../public/assets/1formeLogo.png";
+import Image from "next/image";
 export const metadata: Metadata = {
   title: "1ForMe",
   description: "1ForMe",
@@ -35,9 +37,15 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body className={RF_Dewi.className}>
-      
-          <AntdRegistry>{children}</AntdRegistry>
-        
+        <AntdRegistry>
+          <Image
+            width={200}
+            style={{ margin: "auto", padding: "auto" }}
+            height={80}
+            src={oneForMeLogo}
+            alt="1forme"
+          />
+        </AntdRegistry>
       </body>
     </html>
   );
