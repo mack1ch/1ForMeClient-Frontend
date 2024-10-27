@@ -37,15 +37,7 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body className={RF_Dewi.className}>
-        <AntdRegistry>
-          <Image
-            width={200}
-            style={{ margin: "auto", padding: "auto" }}
-            height={80}
-            src={oneForMeLogo}
-            alt="1forme"
-          />
-        </AntdRegistry>
+        <AntdRegistry>{children}</AntdRegistry>
       </body>
     </html>
   );
