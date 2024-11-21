@@ -46,10 +46,11 @@ export const ClubCard = ({
   const trainersWithSlots = allTrainers
     ?.map((trainer) => ({
       trainer,
-      availableSlots: clubSlot.slots.filter((slot) =>
-        slot.trainersAvailable?.some(
-          (availableTrainer) => availableTrainer.id === trainer.id
-        )
+      availableSlots: clubSlot.slots.filter(
+        (slot) =>
+          slot.trainersAvailable?.some(
+            (availableTrainer) => availableTrainer.id === trainer.id
+          ) && slot.isAvailable
       ),
     }))
     .filter(({ availableSlots }) => availableSlots.length > 0); // Оставляем только тех, у кого есть доступные слоты
