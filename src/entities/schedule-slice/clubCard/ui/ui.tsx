@@ -99,7 +99,9 @@ export const ClubCard = ({
                   "slash" +
                   slot.slotId +
                   "slash" +
-                  activeStudioID
+                  activeStudioID +
+                  "slash" +
+                  trainer.id
                 }`}
               >
                 {slot.beginning}

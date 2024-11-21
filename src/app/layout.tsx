@@ -37,7 +37,7 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body className={RF_Dewi.className}>
-        <AntdRegistry>Работаем над новым сервисом для записи в студии 1ForMe</AntdRegistry>
+        <AntdRegistry>{children}</AntdRegistry>
       </body>
     </html>
   );

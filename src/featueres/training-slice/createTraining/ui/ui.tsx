@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 import { Button, Form, Input, message, notification, Select } from "antd";
 import styles from "./ui.module.scss";
 import InputMask from "react-input-mask";
-
 import {
   convertDateToDoteFormatDDMMYYYY,
   convertToMinutes,
@@ -50,7 +49,7 @@ export const CreateTraining = ({ time }: { time: string }) => {
   });
   // Получаю тарифы персональных тренеровок
   const { data: tariffs } = useSWR<ITariff[], Error>(
-    `/studios/byId/${URLParams.studioID}/tariffs?isForSubscription=0`,
+    `/users/${URLParams.trainerID}/tariffs?isForSubscription=0`,
     fetcher
   );
 

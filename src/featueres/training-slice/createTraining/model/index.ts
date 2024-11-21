@@ -33,16 +33,18 @@ export const disabledDate: RangePickerProps["disabledDate"] = (current) => {
 };
 
 export function parseURLParams(input: string) {
-  const [date, clubID, slotID, studioID] = input
+  const [date, clubID, slotID, studioID, trainerID] = input
     .replace("slash", "/")
     .replace("slash", "/")
-    .replace("shash", "/")
+    .replace("slash", "/")
+    .replace("slash", "/")
     .split("/");
   return {
     date,
     clubID: parseInt(clubID, 10),
     slotID: parseInt(slotID, 10),
     studioID: parseInt(studioID, 10),
+    trainerID: parseInt(trainerID, 10),
   };
 }
 
