@@ -35,7 +35,7 @@ export const ScheduleRender = () => {
   );
 
   const openTab = (studioId: number) => setActiveStudioID(studioId);
-  const noSlotsAvailable = schedule?.timeTable.every((timeTable) => {
+  const noSlotsAvailable = schedule?.timeTable?.every((timeTable) => {
     return timeTable.clubsTimeTable.every((clubSchedule) => {
       return getFreeSlotsCount(clubSchedule) === 0;
     });
@@ -68,7 +68,7 @@ export const ScheduleRender = () => {
         ) : noSlotsAvailable ? (
           <LackData>Свободных слотов нет</LackData>
         ) : (
-          schedule?.timeTable.map((timeTable, index) => {
+          schedule?.timeTable?.map((timeTable, index) => {
             const { day, dayOfWeek, month } = parseDateToDateAndMonth(
               timeTable.date
             );
