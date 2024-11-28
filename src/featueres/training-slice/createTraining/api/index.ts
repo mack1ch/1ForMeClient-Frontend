@@ -15,14 +15,14 @@ export const createTraining = async (
         date: convertDateFormatToDashFormat(formData.date.toString()),
         club: formData.clubID,
         clients: formData.clients,
-        tariff: formData.tariffID,
+        tariff: Number(formData.tariffID),
         trainerId: formData.trainerID,
         createClient: {
           name: parseNameToNameAndSurname(formData.userName)[0],
           surname: parseNameToNameAndSurname(formData.userName)[1],
           role: "client",
           phone: formData.userPhone,
-          chatType: formData.userChatTypeID,
+          chatType: Number(formData.userChatTypeID),
           userNameInMessenger: formData.userNameInMessenger,
         },
       }
