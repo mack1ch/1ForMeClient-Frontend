@@ -13,6 +13,7 @@ import useSWR from "swr";
 import { IUser } from "@/shared/interface/user";
 import { fetcher } from "@/shared/api";
 import { setChosenSlotTime } from "@/shared/redux/slices/chosenSlotTime";
+import { useState } from "react";
 
 export const ClubCard = ({
   clubSlot,
@@ -24,6 +25,9 @@ export const ClubCard = ({
   activeStudioID: number;
 }) => {
   const dispatch = useAppDispatch();
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+
+  const toggleText = () => setIsExpanded(!isExpanded);
 
   const handleSlotClick = (trainer: IUser, slotTime: string) => {
     dispatch(resetStore());
@@ -84,7 +88,20 @@ export const ClubCard = ({
                   </span>
                 )}
               </div>
-              <p className={styles.p}>{trainer.trainerProfile?.description}</p>
+              <div className={styles.expandableText}>
+                <p
+                  className={`${styles.text} ${
+                    isExpanded ? styles.expanded : ""
+                  }`}
+                >
+                  {trainer.trainerProfile.description}
+                </p>
+                {trainer.trainerProfile.description.length > 100 && (
+                  <button onClick={toggleText} className={styles.toggleButton}>
+                    {isExpanded ? "Скрыть" : "Показать всё"}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
           <div className={styles.tags}>
