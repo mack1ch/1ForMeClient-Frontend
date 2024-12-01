@@ -25,9 +25,16 @@ export const ClubCard = ({
   activeStudioID: number;
 }) => {
   const dispatch = useAppDispatch();
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [expandedTrainers, setExpandedTrainers] = useState<
+    Record<number, boolean>
+  >({});
 
-  const toggleText = () => setIsExpanded(!isExpanded);
+  const toggleText = (trainerId: number) => {
+    setExpandedTrainers((prevState) => ({
+      ...prevState,
+      [trainerId]: !prevState[trainerId],
+    }));
+  };
 
   const handleSlotClick = (trainer: IUser, slotTime: string) => {
     dispatch(resetStore());
@@ -91,14 +98,17 @@ export const ClubCard = ({
               <div className={styles.expandableText}>
                 <p
                   className={`${styles.text} ${
-                    isExpanded ? styles.expanded : ""
+                    expandedTrainers[trainer.id] ? styles.expanded : ""
                   }`}
                 >
                   {trainer.trainerProfile.description}
                 </p>
                 {trainer.trainerProfile.description.length > 100 && (
-                  <button onClick={toggleText} className={styles.toggleButton}>
-                    {isExpanded ? "Скрыть" : "Показать всё"}
+                  <button
+                    onClick={() => toggleText(trainer.id)}
+                    className={styles.toggleButton}
+                  >
+                    {expandedTrainers[trainer.id] ? "Скрыть" : "Показать всё"}
                   </button>
                 )}
               </div>
