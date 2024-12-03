@@ -32,6 +32,9 @@ export const CreateTraining = ({ time }: { time: string }) => {
   const trainer = useAppSelector(
     (state) => state.availableTrainers.availableTrainers
   );
+  if (!trainer) {
+    router.push("/");
+  }
   const chosenTime = useAppSelector((state) => state.chosenTime.time);
   const [isButtonLoading, setIsButtonLoading] = useState<boolean>(false);
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
@@ -80,13 +83,9 @@ export const CreateTraining = ({ time }: { time: string }) => {
   const currentMessengerLabel = chatTypesOptions?.find(
     (option) => option.value === formData.userChatTypeID
   );
+
   useEffect(() => {
     if (Array.isArray(tariffs) && trainer) {
-      console.log(
-        tariffs.filter(
-          (tariff) => tariff.trainerCategory === trainer.trainerProfile.category
-        )
-      );
       setSelectTariffsOptions((prev) =>
         tariffs
           ?.filter(
@@ -206,8 +205,22 @@ export const CreateTraining = ({ time }: { time: string }) => {
 
   // Валидация
   const checkFormValidity = () => {
-    const { userName, userPhone, userChatTypeID, tariffID, date } = formData;
-    return Boolean(userName && userPhone && userChatTypeID && tariffID);
+    const {
+      userName,
+      userPhone,
+      userChatTypeID,
+      tariffID,
+      userNameInMessenger,
+    } = formData;
+    return userChatTypeID === "WhatsApp"
+      ? Boolean(userName && userPhone && userChatTypeID && tariffID)
+      : Boolean(
+          userName &&
+            userPhone &&
+            userChatTypeID &&
+            tariffID &&
+            userNameInMessenger
+        );
   };
   useEffect(() => {
     setIsFormValid(checkFormValidity());
