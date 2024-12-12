@@ -8,7 +8,7 @@ import { IFormData, ISelectOptions } from "../interface";
 import { useRouter } from "next/navigation";
 import { Button, Form, Input, message, notification, Select } from "antd";
 import styles from "./ui.module.scss";
-import InputMask from "react-input-mask";
+import { MaskedInput } from "antd-mask-input";
 import {
   convertDateToDoteFormatDDMMYYYY,
   convertToMinutes,
@@ -212,7 +212,13 @@ export const CreateTraining = ({ time }: { time: string }) => {
       tariffID,
       userNameInMessenger,
     } = formData;
-    return userChatTypeID === "WhatsApp"
+    console.log(
+      formData,
+      "form",
+      Boolean(userName && userPhone && userChatTypeID && tariffID)
+    );
+
+    return userChatTypeID === "2"
       ? Boolean(userName && userPhone && userChatTypeID && tariffID)
       : Boolean(
           userName &&
@@ -228,6 +234,7 @@ export const CreateTraining = ({ time }: { time: string }) => {
   const { day, dayOfWeek, month } = parseDateToDateAndMonth(
     formData.date.toString()
   );
+
   return (
     <>
       {contextHolder}
@@ -258,14 +265,15 @@ export const CreateTraining = ({ time }: { time: string }) => {
               alignItems: "flex-start",
             }}
           >
-            <InputMask
-              mask="+79999999999"
-              maskChar={null}
+            <MaskedInput
+              mask="+7000-000-0000"
               type="tel"
               value={formData?.userPhone}
+              placeholder="Номер телефона"
+              size="large"
               onChange={(e) => handleInputChange("userPhone", e.target.value)}
             >
-              {
+              {/* {
                 //@ts-ignore
                 (inputProps) => (
                   <Input
@@ -276,8 +284,8 @@ export const CreateTraining = ({ time }: { time: string }) => {
                     {...inputProps}
                   />
                 )
-              }
-            </InputMask>
+              } */}
+            </MaskedInput>
           </Form.Item>
           <Form.Item
             name="userChatTypeID"
@@ -299,6 +307,14 @@ export const CreateTraining = ({ time }: { time: string }) => {
           {(currentMessengerLabel?.label === "Telegram" ||
             currentMessengerLabel?.label === "Instagram") && (
             <Form.Item
+              rules={[
+                {
+                  pattern: /^@([a-zA-Z0-9_]{1,32})$/,
+                  message: "формат ника должен быть @username",
+                },
+              ]}
+              label="Введите имя пользователя (@username)"
+              tooltip="Введите свой ник в телеграмме, на него мы отправим сообщение об оплате"
               style={{
                 width: "100%",
                 textAlign: "start",

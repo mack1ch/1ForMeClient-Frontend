@@ -1,11 +1,9 @@
 import { instance } from "@/shared/api";
 import { ITariff } from "@/shared/interface/tariff";
-import { IUser } from "@/shared/interface/user";
 import { IFormData, ITrainings } from "../interface";
 import { ISubscription } from "@/shared/interface/subscription";
 import { convertDateFormatToDashFormat } from "@/shared/lib/parse/date";
 import { IClubSlot } from "@/shared/interface/slots";
-import { IClub } from "@/shared/interface/club";
 import { parseNameToNameAndSurname } from "@/shared/lib/parse/user";
 
 export const getTariffs = async (): Promise<ITariff[] | Error> => {
