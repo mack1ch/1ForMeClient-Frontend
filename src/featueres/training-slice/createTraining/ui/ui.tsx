@@ -25,9 +25,20 @@ import { useAppSelector } from "@/shared/redux/store";
 import { IUser } from "@/shared/interface/user";
 import { createTraining } from "../api";
 
-export const CreateTraining = ({ time }: { time: string }) => {
+export const CreateTraining = ({
+  date,
+  clubID,
+  slotID,
+  studioID,
+  trainerID,
+}: {
+  date: string;
+  clubID: string;
+  slotID: number;
+  studioID: string;
+  trainerID: number;
+}) => {
   const [api, contextHolder] = notification.useNotification();
-  const URLParams = parseURLParams(time);
   const router = useRouter();
   const trainer = useAppSelector(
     (state) => state.availableTrainers.availableTrainers
@@ -39,20 +50,21 @@ export const CreateTraining = ({ time }: { time: string }) => {
   const [isButtonLoading, setIsButtonLoading] = useState<boolean>(false);
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [formData, setFormData] = useState<IFormData>({
-    date: URLParams.date,
-    slotID: URLParams.slotID,
+    date: date,
+    slotID: slotID,
     dateInput: null,
     tariffID: null,
-    clubID: URLParams.clubID,
+    clubID: clubID,
     trainerID: trainer?.id || "",
     userChatTypeID: "",
     userName: "",
     userPhone: "",
     clients: undefined,
   });
+  console.log(formData);
   // Получаю тарифы персональных тренеровок
   const { data: tariffs } = useSWR<ITariff[], Error>(
-    `/users/${URLParams.trainerID}/tariffs?isForSubscription=0`,
+    `/users/${trainerID}/tariffs?isForSubscription=0`,
     fetcher
   );
 
@@ -91,7 +103,9 @@ export const CreateTraining = ({ time }: { time: string }) => {
           ?.filter(
             (tariff) =>
               tariff.trainerCategory.toLowerCase() ===
-              trainer?.trainerProfile.category.toLowerCase()
+                trainer?.trainerProfile.category.toLowerCase() &&
+              tariff.studio.id === Number(studioID) &&
+              !tariff.name.includes("непубличный")
           )
           .map((item) => ({
             label: item.name,
@@ -131,16 +145,13 @@ export const CreateTraining = ({ time }: { time: string }) => {
 
   // date reload
   useEffect(() => {
-    if (URLParams.date) {
+    if (date) {
       setFormData((prev) => ({
         ...prev,
-        dateInput: dayjs(
-          convertDateToDoteFormatDDMMYYYY(URLParams.date),
-          "DD.MM.YYYY"
-        ),
+        dateInput: dayjs(convertDateToDoteFormatDDMMYYYY(date), "DD.MM.YYYY"),
       }));
     }
-  }, [URLParams.date]);
+  }, [date]);
   // handleChange
 
   const handleTariffChange = (value: string) => {
@@ -212,11 +223,6 @@ export const CreateTraining = ({ time }: { time: string }) => {
       tariffID,
       userNameInMessenger,
     } = formData;
-    console.log(
-      formData,
-      "form",
-      Boolean(userName && userPhone && userChatTypeID && tariffID)
-    );
 
     return userChatTypeID === "2"
       ? Boolean(userName && userPhone && userChatTypeID && tariffID)
@@ -272,20 +278,7 @@ export const CreateTraining = ({ time }: { time: string }) => {
               placeholder="Номер телефона"
               size="large"
               onChange={(e) => handleInputChange("userPhone", e.target.value)}
-            >
-              {/* {
-                //@ts-ignore
-                (inputProps) => (
-                  <Input
-                    type="number"
-                    placeholder="Номер телефона"
-                    size="large"
-                    maxLength={12}
-                    {...inputProps}
-                  />
-                )
-              } */}
-            </MaskedInput>
+            ></MaskedInput>
           </Form.Item>
           <Form.Item
             name="userChatTypeID"

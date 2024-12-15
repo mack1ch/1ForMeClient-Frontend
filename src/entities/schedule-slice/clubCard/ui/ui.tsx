@@ -71,9 +71,7 @@ export const ClubCard = ({
       <div className={styles.info}>
         <div className={styles.info__text}>
           <h4 className={styles.name}>{clubSlot.club.name}</h4>
-          <h5 className={styles.freeSlots}>
-            {countAvailableSlots(clubSlot.slots)} свободных слотов по часу
-          </h5>
+          
         </div>
       </div>
 
@@ -120,17 +118,16 @@ export const ClubCard = ({
                 onClick={() => handleSlotClick(trainer, slot.beginning)}
                 key={slot.slotId}
                 className={styles.tag}
-                href={`newtraining/${
-                  date +
-                  "slash" +
-                  clubSlot.club.id +
-                  "slash" +
-                  slot.slotId +
-                  "slash" +
-                  activeStudioID +
-                  "slash" +
-                  trainer.id
-                }`}
+                href={{
+                  pathname: "/newtraining",
+                  query: {
+                    date: date,
+                    clubID: clubSlot.club.id,
+                    slotID: slot.slotId,
+                    studioID: activeStudioID,
+                    trainerID: trainer.id,
+                  },
+                }}
               >
                 {slot.beginning}
                 <Image src={Plus} width={16} height={16} alt="Plus" />
